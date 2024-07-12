@@ -1,0 +1,34 @@
+name: redis
+
+services:
+  redis:
+    image: redis:latest
+    command: [
+        "redis-server",
+        "--appendonly",
+        "yes",
+        "--port",
+        "6379"
+      ]
+    volumes:
+      - redis_data:/data
+    networks:
+     - ai-assistant-network
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1024M
+
+volumes:
+  redis_data:
+    external: true
+    name: redis_data
+
+networks:
+  ai-assistant-network:
+    external: true
+    name: ai-assistant-network

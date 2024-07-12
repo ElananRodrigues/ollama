@@ -1,0 +1,36 @@
+name: postgrespgvector
+
+services:
+  postgrespgvector:
+    image: pgvector/pgvector:0.6.2-pg16
+    restart: always
+    platform: linux/x86_64
+    environment:
+      - POSTGRES_PASSWORD=
+    networks:
+     - ai-assistant-network
+    ports:
+      - 5432:5432
+    volumes:
+      - pgvector:/var/lib/postgresql/data
+      - ./postgrespgvector/vector_extension.sql:/docker-entrypoint-initdb.d/0-vector_extension.sql
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1024M
+
+volumes:
+  pgvector:
+    external: true
+    name: pgvector
+
+networks:
+  ai-assistant-network:
+    external: true
+    name: ai-assistant-network

@@ -1,0 +1,33 @@
+version: "3.7"
+
+services:
+  postgres:
+    image: postgres:12
+    environment:
+      - POSTGRES_PASSWORD=Mfcd62!!Mfcd62!!
+    networks:
+     - app
+    ports:
+      - 5437:5432
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1024M
+
+volumes:
+  postgres:
+    external: true
+    name: postgres
+
+networks:
+  app:
+    external: true
+    name: bridge

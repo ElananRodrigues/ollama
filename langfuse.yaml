@@ -1,0 +1,33 @@
+name: langfuse
+
+services:
+  langfuse:
+    image: ghcr.io/langfuse/langfuse:latest
+    networks:
+     - ai-assistant-network
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=
+      - DATABASE_URL=
+      - NEXTAUTH_SECRET=
+      - SALT=
+      - NEXTAUTH_URL=
+      - TELEMETRY_ENABLED=
+      - NEXT_PUBLIC_SIGN_UP_DISABLED=
+      - LANGFUSE_ENABLE_EXPERIMENTAL_FEATURES=
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+          constraints:
+            - node.role == manager
+      resources:
+          limits:
+            cpus: '0.5'
+            memory: 1024M
+
+networks:
+  ai-assistant-network:
+    external: true
+    name: ai-assistant-network

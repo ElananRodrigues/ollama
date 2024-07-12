@@ -1,0 +1,36 @@
+version: "3.7"
+
+services:
+  redis:
+    image: redis:latest
+    command: [
+        "redis-server",
+        "--appendonly",
+        "yes",
+        "--port",
+        "6379"
+      ]
+    volumes:
+      - redis_data:/data
+    networks:
+     - app
+    ports:
+      - "6380:6379"
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1024M
+
+volumes:
+  redis_data:
+    external: true
+    name: redis_data
+
+networks:
+  app:
+    external: true
+    name: bridge

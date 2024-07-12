@@ -1,0 +1,41 @@
+name: flowise
+
+services:
+  flowise:
+    image: flowiseai/flowise:latest
+    command: flowise start
+    ports:
+     - 3000:3000
+    networks:
+     - ai-assistant-network
+    volumes:
+     - flowise_data:/root/.flowise
+    environment:
+     - FLOWISE_USERNAME=
+     - FLOWISE_PASSWORD=
+     - DATABASE_TYPE=
+     - DATABASE_HOST=
+     - DATABASE_PORT=
+     - DATABASE_USER=
+     - DATABASE_PASSWORD=
+     - DATABASE_NAME=
+     - FLOWISE_SECRETKEY_OVERWRITE=
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1024M
+
+networks:
+  ai-assistant-network:
+    external: true
+    name: ai-assistant-network
+
+volumes:
+  flowise_data:
+    external: true
